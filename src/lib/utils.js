@@ -3,17 +3,38 @@ import { twMerge } from "tailwind-merge";
 
 export const cn = (...inputs) => twMerge(clsx(inputs));
 
-// Today as "YYYY-MM-DD" in Asia/Dhaka (UTC+6, no daylight saving).
+// Asia/Dhaka is UTC+6 all year (no daylight saving).
+const dhaka = (options) => new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dhaka", ...options });
+const toDate = (value) =>
+  new Date(/^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00+06:00` : value);
+
+// Today as "YYYY-MM-DD" in Asia/Dhaka.
 export const todayInDhaka = () =>
   new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Dhaka" }).format(new Date());
 
+// "2026-12-01" or an ISO date -> "1 Dec 2026"
+export const formatDate = (value) =>
+  value ? dhaka({ day: "numeric", month: "short", year: "numeric" }).format(toDate(value)) : "—";
+
+// ISO date -> "1 Dec 2026, 2:30 pm"
+export const formatDateTime = (value) =>
+  value
+    ? dhaka({ day: "numeric", month: "short", year: "numeric", hour: "numeric", minute: "2-digit", hour12: true }).format(toDate(value))
+    : "—";
+
 export const formatPrice = (price) => `৳${Number(price).toLocaleString("en-US")}`;
+
+export const formatMoney = (amount, currency = "usd") =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: currency.toUpperCase() }).format(amount);
 
 // "14:00" -> "2:00 PM"
 export const formatSlot = (slot) => {
   const [hour, minute] = slot.split(":").map(Number);
   return `${hour % 12 || 12}:${String(minute).padStart(2, "0")} ${hour >= 12 ? "PM" : "AM"}`;
 };
+
+// "cs_test_a1b2...x9y8z7" -> "…x9y8z7"
+export const shortId = (id) => (id ? `…${String(id).slice(-8)}` : "—");
 
 // Builds "a=1&b=2", skipping empty values.
 export const buildQuery = (params) => {
