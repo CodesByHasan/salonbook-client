@@ -1,26 +1,21 @@
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import Navbar from "@/components/shared/Navbar.jsx";
-import Footer from "@/components/shared/Footer.jsx";
+
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata = {
-  title: {
-    default: "SalonBook | Salon Appointment Booking",
-    template: "%s | SalonBook",
-  },
-  description:
-    "Discover salon services and book your next appointment with SalonBook.",
+  title: { default: "SalonBook | Salon Appointment Booking", template: "%s | SalonBook" },
+  description: "Discover salon services and book your next appointment with SalonBook.",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-white text-gray-900 antialiased">
-        <TooltipProvider>
-          <Navbar />
-          <main className="min-h-[70vh]">{children}</main>
-          <Footer />
-        </TooltipProvider>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className="min-h-screen bg-background text-foreground antialiased">
+        {children}
+        <Toaster richColors closeButton position="top-right" />
       </body>
     </html>
   );
