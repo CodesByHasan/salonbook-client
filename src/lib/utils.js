@@ -46,8 +46,13 @@ export const buildQuery = (params) => {
 };
 
 // Only allow redirects to pages inside this site (blocks "//evil.com").
+// Auth pages are rejected too: "/sign-in?redirect=/sign-in" would redirect forever for a signed-in user.
 export const safeRedirect = (value) =>
-  typeof value === "string" && value.startsWith("/") && !value.startsWith("//") && !value.includes("\\")
+  typeof value === "string" &&
+  value.startsWith("/") &&
+  !value.startsWith("//") &&
+  !value.includes("\\") &&
+  !/^\/(sign-in|sign-up)(?:[/?#]|$)/.test(value)
     ? value
     : null;
 

@@ -14,6 +14,9 @@ const GoogleIcon = (props) => (
   </svg>
 );
 
+// Absolute URL on THIS site. A relative callbackURL can be resolved against the Express origin.
+const absolute = (path) => `${window.location.origin}${path}`;
+
 export default function GoogleButton({ redirectTo, disabled }) {
   const [loading, setLoading] = useState(false);
 
@@ -23,8 +26,8 @@ export default function GoogleButton({ redirectTo, disabled }) {
       // On success the browser leaves for Google and comes back to callbackURL.
       const { error } = await signIn.social({
         provider: "google",
-        callbackURL: redirectTo ?? "/dashboard",
-        errorCallbackURL: "/sign-in",
+        callbackURL: absolute(redirectTo ?? "/dashboard"),
+        errorCallbackURL: absolute("/sign-in"),
       });
       if (error) throw new Error(error.message);
     } catch (error) {

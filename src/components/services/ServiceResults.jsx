@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SearchX } from "lucide-react";
 import ServiceCard from "./ServiceCard";
 import { buttonVariants } from "@/components/ui/button";
+import { loadData } from "@/lib/api/fetcher";
 import { getServices } from "@/lib/api/services";
 import { PAGE_SIZE } from "@/lib/constants";
 import { buildQuery, cn } from "@/lib/utils";
@@ -12,15 +13,17 @@ const pageHref = (filters, page) => {
 };
 
 export default async function ServiceResults({ filters }) {
-    const { data, error } = await loadData(() => getServices({ ...filters, limit: PAGE_SIZE }));
-    if (error) {
-        return (  
-          <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-6 text-sm text-destructive">
+  const { data, error } = await loadData(() => getServices({ ...filters, limit: PAGE_SIZE }));
+
+  if (error) {
+    return (
+      <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-6 text-sm text-destructive">
         {error}
       </div>
     );
   }
-   const { services, meta } = data;
+
+  const { services, meta } = data;
 
   if (services.length === 0) {
     return (

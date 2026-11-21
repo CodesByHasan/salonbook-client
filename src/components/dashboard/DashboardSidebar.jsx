@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -22,6 +21,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 const menuItemsByRole = {
@@ -79,14 +79,23 @@ const menuItemsByRole = {
 
 export default function DashboardSidebar({ user }) {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
 
   const role = user?.role === "admin" ? "admin" : "customer";
   const menuItems = menuItemsByRole[role];
+  const overviewUrl = menuItems[0].url;
+
+  // Overview is exact; the others also stay active on sub-pages (e.g. services/add).
+  const isActiveUrl = (url) => (url === overviewUrl ? pathname === url : pathname.startsWith(url));
 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b p-4">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl">
+        <Link
+          href="/"
+          onClick={() => setOpenMobile(false)}
+          className="flex items-center gap-2 font-bold text-xl"
+        >
           <Scissors className="size-6 text-primary" />
           <span>SalonBook</span>
         </Link>
@@ -101,13 +110,12 @@ export default function DashboardSidebar({ user }) {
           <SidebarMenu>
             {menuItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.url;
 
               return (
                 <SidebarMenuItem key={item.url}>
                   <SidebarMenuButton
-                    render={<Link href={item.url} />}
-                    isActive={isActive}
+                    render={<Link href={item.url} onClick={() => setOpenMobile(false)} />}
+                    isActive={isActiveUrl(item.url)}
                     tooltip={item.name}
                   >
                     <Icon />

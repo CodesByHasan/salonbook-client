@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import ProfileForm from "@/components/dashboard/ProfileForm";
 import PageHeader from "@/components/shared/PageHeader";
 import { getSession } from "@/lib/session";
@@ -5,7 +6,10 @@ import { getSession } from "@/lib/session";
 export const metadata = { title: "My Profile" };
 
 export default async function CustomerProfilePage() {
-  const { user } = await getSession();
+  const session = await getSession();
+  if (!session) redirect("/sign-in?redirect=/dashboard");
+
+  const { user } = session;
 
   return (
     <div className="space-y-6">

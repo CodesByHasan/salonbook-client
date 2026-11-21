@@ -15,7 +15,7 @@ export async function getServices(params = {}) {
 export async function getServiceById(id) {
   const res = await apiFetch(`/api/services/${encodeURIComponent(id)}`);
 
-  if (res.status === 404) return null;
+  if (res.status === 404 || res.status === 400) return null;
   if (!res.ok) throw new Error(res.message || "Could not load the service.");
 
   return res.data;
