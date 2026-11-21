@@ -17,7 +17,8 @@ import { cn, formatSlot } from "@/lib/utils";
 const emptyValues = { date: "", timeSlot: "", message: "" };
 
 // A slot is in the past if it has already started (Asia/Dhaka = UTC+6).
-const isPastSlot = (date, slot) => Boolean(date && slot) && new Date(`${date}T${slot}:00+06:00`) <= new Date();
+const isPastSlot = (date, slot) =>
+  Boolean(date && slot) && new Date(`${date}T${slot}:00+06:00`) <= new Date();
 
 export default function BookingForm({ serviceId, minDate }) {
   const [values, setValues] = useState(emptyValues);
@@ -70,13 +71,19 @@ export default function BookingForm({ serviceId, minDate }) {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
       {booked && (
-        <div role="status" className="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+        <div
+          role="status"
+          className="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800"
+        >
           <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
           <p>
             Request sent! It stays <strong>pending</strong> until confirmed.{" "}
             {/* Block 6 adds the appointments page under this dashboard. */}
-            <Link href="/dashboard/customer" className="font-medium underline underline-offset-4">
-              Go to my dashboard
+            <Link
+              href="/dashboard/customer/appointments"
+              className="font-medium underline underline-offset-4"
+            >
+              View my appointments
             </Link>
           </p>
         </div>
@@ -112,7 +119,9 @@ export default function BookingForm({ serviceId, minDate }) {
                 onClick={() => update("timeSlot", slot)}
                 className={cn(
                   "h-9 rounded-lg border text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40",
-                  selected ? "border-primary bg-primary text-primary-foreground" : "hover:bg-muted",
+                  selected
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "hover:bg-muted",
                 )}
               >
                 {formatSlot(slot)}
@@ -120,10 +129,19 @@ export default function BookingForm({ serviceId, minDate }) {
             );
           })}
         </div>
-        {errors.timeSlot?.[0] && <p role="alert" className="text-xs text-destructive">{errors.timeSlot[0]}</p>}
+        {errors.timeSlot?.[0] && (
+          <p role="alert" className="text-xs text-destructive">
+            {errors.timeSlot[0]}
+          </p>
+        )}
       </fieldset>
 
-      <FormField id="message" label="Message (optional)" error={errors.message?.[0]} hint="Anything the stylist should know. Max 300 characters.">
+      <FormField
+        id="message"
+        label="Message (optional)"
+        error={errors.message?.[0]}
+        hint="Anything the stylist should know. Max 300 characters."
+      >
         <Textarea
           id="message"
           value={values.message}
