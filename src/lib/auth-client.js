@@ -1,14 +1,7 @@
 import { createAuthClient } from "better-auth/react";
-import { jwtClient } from "better-auth/client/plugins";
 
-export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-  plugins: [jwtClient()],
-});
+// No baseURL: requests go to this site's own /api/auth/*,
+// which next.config.mjs proxies to the Express server.
+export const authClient = createAuthClient();
 
-export const {
-  signIn,
-  signUp,
-  signOut,
-  useSession,
-} = authClient;
+export const { signIn, signUp, signOut } = authClient;
