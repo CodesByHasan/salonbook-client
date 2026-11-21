@@ -1,4 +1,4 @@
-import { apiFetch } from "./fetcher";
+import { apiFetch, assertOk } from "./fetcher";
 import { buildQuery } from "@/lib/utils";
 
 // Public list (active services only).
@@ -19,4 +19,13 @@ export async function getServiceById(id) {
   if (!res.ok) throw new Error(res.message || "Could not load the service.");
 
   return res.data;
+}
+
+// Admin: all services (active and inactive).
+export async function getManageServices(params = {}) {
+  const res = assertOk(
+    await apiFetch(`/api/services/manage?${buildQuery(params)}`, { auth: true }),
+    "Could not load services.",
+  );
+  return { services: res.data ?? [], meta: res.meta };
 }

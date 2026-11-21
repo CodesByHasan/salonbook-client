@@ -1,6 +1,7 @@
 "use server";
 
-import { apiFetch } from "@/lib/api/fetcher";
+import { revalidatePath } from "next/cache";
+import { apiFetch, toActionResult } from "@/lib/api/fetcher";
 import { bookingSchema } from "@/lib/validators/appointment";
 import { getFieldErrors } from "@/lib/validators/common";
 
@@ -25,10 +26,35 @@ export async function createAppointment(input) {
     const { notes, ...rest } = res.errors ?? {};
     return {
       success: false,
+      status: res.status,
       message: res.message || "Could not book the appointment.",
       errors: res.errors ? { ...rest, ...(notes && { message: notes }) } : undefined,
     };
   }
 
+  revalidatePath("/dashboard/customer", "layout");
   return { success: true, message: "Appointment requested! It stays pending until it is confirmed." };
+}
+
+async function patch(path, message) {
+  const res = await apiFetch(path, { method: "PATCH", auth: true });
+  if (res.ok) revalidatePath("/dashboard", "layout");
+  return toActionResult(res, message);
+}
+
+const enc = encodeURIComponent;
+
+// Customer: own + pending only (enforced by the API).
+export async function cancelMyAppointment(id) {
+  return patch(`/api/appointments/${enc(id)}/cancel`, "Appointment cancelled.");
+}
+
+// Admin: pending only.
+export async function confirmAppointment(id) {
+  return patch(`/api/appointments/admin/${enc(id)}/confirm`, "Appointment confirmed.");
+}
+
+// Admin: pending or confirmed (not paid).
+export async function adminCancelAppointment(id) {
+  return patch(`/api/appointments/admin/${enc(id)}/cancel`, "Appointment cancelled.");
 }
