@@ -133,7 +133,7 @@ To test the payment workflow locally:
 2. Run Stripe CLI:
 
 ```bash
-stripe listen --forward-to localhost:5000/api/webhooks/stripe
+stripe listen --forward-to localhost:5001/api/webhooks/stripe
 ```
 
 3. Copy the generated webhook signing secret into the server's `.env` file as `STRIPE_WEBHOOK_SECRET`.
