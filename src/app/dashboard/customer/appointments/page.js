@@ -1,4 +1,5 @@
 import AppointmentCards from "@/components/dashboard/AppointmentCards";
+import LiveRefresh from "@/components/shared/LiveRefresh";
 import LoadError from "@/components/shared/LoadError";
 import PageHeader from "@/components/shared/PageHeader";
 import { getMyAppointments } from "@/lib/api/appointments";
@@ -13,6 +14,7 @@ export default async function MyAppointmentsPage() {
     <div className="space-y-6">
       <PageHeader title="My Appointments" description="Track your bookings, cancel pending ones and pay for confirmed ones." />
       {error ? <LoadError message={error} /> : <AppointmentCards appointments={data} />}
+      <LiveRefresh />
     </div>
   );
 }

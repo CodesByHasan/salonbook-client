@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CalendarCheck, CalendarClock, CalendarX2, ListChecks } from "lucide-react";
+import LiveRefresh from "@/components/shared/LiveRefresh";
 import LoadError from "@/components/shared/LoadError";
 import PageHeader from "@/components/shared/PageHeader";
 import StatCard from "@/components/shared/StatCard";
@@ -30,6 +31,8 @@ export default async function CustomerOverviewPage() {
           <StatCard label="Cancelled" value={count("cancelled")} icon={CalendarX2} />
         </div>
       )}
+
+      <LiveRefresh />
     </div>
   );
 }

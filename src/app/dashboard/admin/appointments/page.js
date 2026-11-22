@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AdminAppointmentsTable from "@/components/dashboard/AdminAppointmentsTable";
+import LiveRefresh from "@/components/shared/LiveRefresh";
 import LoadError from "@/components/shared/LoadError";
 import PageHeader from "@/components/shared/PageHeader";
 import Pager from "@/components/shared/Pager";
@@ -51,6 +52,8 @@ export default async function ManageAppointmentsPage({ searchParams }) {
           <Pager basePath="/dashboard/admin/appointments" params={{ status }} meta={data.meta} />
         </>
       )}
+
+      <LiveRefresh />
     </div>
   );
 }

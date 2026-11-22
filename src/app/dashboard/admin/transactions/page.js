@@ -1,10 +1,10 @@
 import { CreditCard } from "lucide-react";
 
 import EmptyState from "@/components/shared/EmptyState";
+import LiveRefresh from "@/components/shared/LiveRefresh";
 import LoadError from "@/components/shared/LoadError";
 import PageHeader from "@/components/shared/PageHeader";
 import Pager from "@/components/shared/Pager";
-import RefreshButton from "@/components/shared/RefreshButton";
 import { PaymentBadge } from "@/components/shared/StatusBadge";
 
 import {
@@ -41,10 +41,8 @@ export default async function TransactionsPage({ searchParams }) {
     <div className="space-y-6">
       <PageHeader
         title="Transactions"
-        description="Payments received through Stripe."
-      >
-        <RefreshButton />
-      </PageHeader>
+        description="Payments received through Stripe. This list updates automatically."
+      />
 
       {error ? (
         <LoadError message={error} />
@@ -121,6 +119,8 @@ export default async function TransactionsPage({ searchParams }) {
           />
         </>
       )}
+
+      <LiveRefresh />
     </div>
   );
 }

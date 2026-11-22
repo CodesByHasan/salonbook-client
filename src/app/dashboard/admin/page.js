@@ -1,4 +1,5 @@
 import { CalendarCheck, CalendarClock, CalendarRange, CreditCard, Scissors, Users } from "lucide-react";
+import LiveRefresh from "@/components/shared/LiveRefresh";
 import LoadError from "@/components/shared/LoadError";
 import PageHeader from "@/components/shared/PageHeader";
 import StatCard from "@/components/shared/StatCard";
@@ -26,6 +27,8 @@ export default async function AdminOverviewPage() {
           <StatCard label="Successful payments" value={stats.successfulPayments} icon={CreditCard} />
         </div>
       )}
+
+      <LiveRefresh />
     </div>
   );
 }
