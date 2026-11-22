@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarCheck, ShieldCheck, Sparkles } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
@@ -11,8 +12,10 @@ const perks = [
 export default function HeroSection() {
   return (
     <section className="relative overflow-hidden bg-linear-to-br from-rose-50 via-white to-amber-50">
-      <div aria-hidden className="absolute -top-24 -right-24 size-96 rounded-full bg-rose-200/50 blur-3xl" />
-      <div aria-hidden className="absolute -bottom-32 -left-24 size-96 rounded-full bg-amber-200/40 blur-3xl" />
+      {/* Salon-themed background image: save a photo as public/images/salon-hero.jpg */}
+      <Image src="/images/salon-hero.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
+      {/* Light overlay keeps the text readable on top of the photo. */}
+      <div aria-hidden className="absolute inset-0 bg-linear-to-r from-white/95 via-white/85 to-white/40" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:py-32">
         <div className="max-w-2xl">
@@ -30,7 +33,7 @@ export default function HeroSection() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/services" className={buttonVariants({ size: "lg", className: "h-11 px-6 text-base" })}>
-              Browse Services <ArrowRight data-icon="inline-end" />
+              Explore Salon Services <ArrowRight data-icon="inline-end" />
             </Link>
             <Link href="/sign-up" className={buttonVariants({ variant: "outline", size: "lg", className: "h-11 px-6 text-base" })}>
               Create Free Account

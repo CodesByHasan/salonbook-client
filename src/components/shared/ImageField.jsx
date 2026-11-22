@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import FormField from "@/components/shared/FormField";
 import { uploadImage } from "@/lib/upload";
 
-export default function ImageField({ id, label, value, onChange, error, disabled }) {
+// uploadOnly: the admin can only upload a file (no pasting a URL). Used by the service form.
+export default function ImageField({ id, label, value, onChange, error, disabled, uploadOnly = false }) {
   const inputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
 
@@ -32,20 +33,31 @@ export default function ImageField({ id, label, value, onChange, error, disabled
 
   return (
     <FormField id={id} label={label} error={error}>
-      <div className="flex gap-2">
-        <Input
-          id={id}
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          placeholder="https://..."
-          disabled={disabled || uploading}
+      <div className="flex items-center gap-2">
+        {!uploadOnly && (
+          <Input
+            id={id}
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
+            placeholder="https://..."
+            disabled={disabled || uploading}
+            className="h-10"
+            aria-invalid={!!error}
+            aria-describedby={error ? `${id}-error` : undefined}
+          />
+        )}
+
+        <Button
+          id={uploadOnly ? id : undefined}
+          type="button"
+          variant="outline"
           className="h-10"
-          aria-invalid={!!error}
-          aria-describedby={error ? `${id}-error` : undefined}
-        />
-        <Button type="button" variant="outline" className="h-10" disabled={disabled || uploading} onClick={() => inputRef.current?.click()}>
-          {uploading ? "Uploading…" : "Upload"}
+          disabled={disabled || uploading}
+          onClick={() => inputRef.current?.click()}
+        >
+          {uploading ? "Uploading…" : uploadOnly && canPreview ? "Change image" : "Upload"}
         </Button>
+
         <input ref={inputRef} type="file" accept="image/*" hidden onChange={handleFile} />
       </div>
 

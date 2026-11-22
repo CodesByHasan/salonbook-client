@@ -91,7 +91,7 @@ export default function ServiceForm({ service }) {
             <Textarea id="description" rows={4} value={values.description} onChange={(e) => update("description", e.target.value)} disabled={isPending} aria-invalid={!!errors.description} />
           </FormField>
 
-          <ImageField id="image" label="Image" value={values.image} onChange={(value) => update("image", value)} error={errors.image?.[0]} disabled={isPending} />
+          <ImageField id="image" label="Image" uploadOnly value={values.image} onChange={(value) => update("image", value)} error={errors.image?.[0]} disabled={isPending} /> 
 
           <div className="flex items-center justify-between rounded-lg border p-4">
             <div>
