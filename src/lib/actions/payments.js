@@ -3,45 +3,26 @@
 import { revalidatePath } from "next/cache";
 import { apiFetch, toActionResult } from "@/lib/api/fetcher";
 
-// Create Stripe Checkout Session.
+// Pay Now: asks the API for a Stripe Checkout URL. The price is decided on the server.
 export async function startCheckout(appointmentId) {
-  if (!appointmentId) {
-    return {
-      success: false,
-      message: "Appointment ID is required.",
-    };
-  }
-
   const res = await apiFetch("/api/payments/create-checkout-session", {
     method: "POST",
     auth: true,
     body: { appointmentId },
   });
 
-  return toActionResult(res, "Redirecting to secure checkout...");
+  return toActionResult(res, "Redirecting to secure checkout…");
 }
 
-// Check Stripe payment and wait for webhook fulfillment.
+// Used by /payment/success to wait for the webhook. Read-only.
 export async function fetchSessionStatus(sessionId) {
-  if (!sessionId) {
-    return {
-      success: false,
-      message: "Payment session ID is missing.",
-    };
-  }
+  const res = await apiFetch(`/api/payments/session-status?session_id=${encodeURIComponent(sessionId)}`, {
+    auth: true,
+  });
 
-  const res = await apiFetch(
-    `/api/payments/session-status?session_id=${encodeURIComponent(sessionId)}`,
-    { auth: true }
-  );
-
-  if (
-    res.ok &&
-    res.data?.paymentStatus === "paid" &&
-    res.data?.recorded === true &&
-    res.data?.appointmentPaymentStatus === "paid"
-  ) {
-    revalidatePath("/dashboard/customer/appointments");
+  // The webhook finished: refresh the dashboards so they show "Paid".
+  if (res.ok && res.data?.recorded && res.data?.appointmentPaymentStatus === "paid") {
+    revalidatePath("/dashboard/customer", "layout");
     revalidatePath("/dashboard/admin/transactions");
   }
 
