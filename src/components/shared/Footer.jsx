@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { SERVICE_CATEGORIES, SITE } from "@/lib/constants";
+import Logo from "@/components/shared/Logo";
 
 const quickLinks = [
   { href: "/", label: "Home" },
@@ -15,9 +16,7 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4">
         {/* Brand + social */}
         <div>
-          <Link href="/" className="text-2xl font-bold text-white">
-            Salon<span className="text-rose-400">Book</span>
-          </Link>
+             <Logo className="text-white" accentClassName="text-rose-400" />
           <p className="mt-4 max-w-xs text-sm leading-7 text-gray-400">{SITE.description}</p>
 
           <div className="mt-5 flex flex-wrap gap-2">

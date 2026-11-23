@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { LayoutDashboard, LogOut, Menu, X } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
+import Logo from "@/components/shared/Logo";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,9 +57,7 @@ export default function NavbarView({ user }) {
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href="/" onClick={closeMenu} className="text-2xl font-bold tracking-tight">
-          Salon<span className="text-primary">Book</span>
-        </Link>
+               <Logo onClick={closeMenu} />
 
         {/* Desktop links */}
         <div className="hidden items-center gap-1 md:flex">
