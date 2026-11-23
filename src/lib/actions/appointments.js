@@ -18,17 +18,17 @@ export async function createAppointment(input) {
   const res = await apiFetch("/api/appointments", {
     method: "POST",
     auth: true,
-    body: { serviceId, date, timeSlot, ...(message && { notes: message }) },
+    body: { serviceId, appointmentDate: date, timeSlot, ...(message && { message }) },
   });
 
   if (!res.ok) {
-    // The API calls the field "notes", the form calls it "message".
-    const { notes, ...rest } = res.errors ?? {};
+    // The API calls the field "appointmentDate", the form calls it "date".
+    const { appointmentDate, ...rest } = res.errors ?? {};
     return {
       success: false,
       status: res.status,
       message: res.message || "Could not book the appointment.",
-      errors: res.errors ? { ...rest, ...(notes && { message: notes }) } : undefined,
+      errors: res.errors ? { ...rest, ...(appointmentDate && { date: appointmentDate }) } : undefined,
     };
   }
 

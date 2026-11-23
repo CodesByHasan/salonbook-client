@@ -16,7 +16,9 @@ async function save(path, method, input, message) {
     return { success: false, message: "Please fix the highlighted fields.", errors: getFieldErrors(parsed.error) };
   }
 
-  const res = await apiFetch(path, { method, auth: true, body: parsed.data });
+  // The API calls the field "serviceName", the form calls it "name".
+  const { name, ...rest } = parsed.data;
+  const res = await apiFetch(path, { method, auth: true, body: { serviceName: name, ...rest } });
   if (res.ok) refresh();
   return toActionResult(res, message);
 }
